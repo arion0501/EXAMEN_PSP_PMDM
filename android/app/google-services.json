@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "590668556780",
+    "project_id": "examen-psp-pmdm",
+    "storage_bucket": "examen-psp-pmdm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:590668556780:android:4d112c58f752686876f8c9",
+        "android_client_info": {
+          "package_name": "marcos.examen.examen_psp_pmdm_marcosgarcia"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQZ36VKG1m3Mts_5SF-WSdwMrjFv65f_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
