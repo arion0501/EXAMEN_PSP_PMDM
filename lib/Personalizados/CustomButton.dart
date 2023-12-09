@@ -41,7 +41,7 @@ class CustomButton extends StatelessWidget {
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.all(16.0),
-                  textStyle: const TextStyle(fontSize: 20),
+                  textStyle: const TextStyle(fontSize: 12),
                 ),
                 onPressed: onPressed,
                 child: Text(labelText),
