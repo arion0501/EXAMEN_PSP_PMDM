@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'Main/HomeView.dart';
+import 'Main/HomeView2.dart';
 import 'OnBoarding/LoginView.dart';
 import 'OnBoarding/RegisterView.dart';
 import 'OnBoarding/SplashView.dart';
@@ -14,7 +16,7 @@ class ExamenApp extends StatelessWidget {
         routes: {
           '/loginview': (context) => LoginView(),
           '/registerview': (context) => RegisterView(),
-          //'/homeview':(context) => HomeView(),
+          '/homeview':(context) => HomeView(),
           '/splashview': (context) => SplashView(),
         },
         initialRoute: '/splashview',
@@ -25,7 +27,7 @@ class ExamenApp extends StatelessWidget {
         routes: {
           '/loginview': (context) => LoginView(),
           '/registerview': (context) => RegisterView(),
-          //'/homeview':(context) => HomeView2(),
+          '/homeview':(context) => HomeView2(),
           '/splashview': (context) => SplashView(),
         },
         initialRoute: '/splashview',
