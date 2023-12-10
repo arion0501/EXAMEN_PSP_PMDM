@@ -7,16 +7,38 @@ class DataHolder {
   static final DataHolder _dataHolder = new DataHolder._internal();
   FirebaseFirestore db = FirebaseFirestore.instance;
   FirebaseAdmin fbAdmin = FirebaseAdmin();
+
   String sNombre = "DataHolder Examen";
   late String sPostTitle;
   FbPosts? selectedPost;
+
+  DataHolder._internal() {
+    initCachedFbPost();
+  }
+
+  void initDataHolder() {
+    sPostTitle = "Titulo de Post";
+  }
 
   factory DataHolder() {
     return _dataHolder;
   }
 
-  void initDataHolder() {
-    sPostTitle = "Titulo de Post";
+  void crearPostEnFB(FbPosts post) {
+    CollectionReference<FbPosts> postRef = db.collection("Post").withConverter(
+        fromFirestore: FbPosts.fromFirestore,
+        toFirestore: (FbPosts post, _) => post.toFirestore());
+
+    postRef.add(post);
+  }
+
+  void saveSelectedPostInCache() async {
+    if (selectedPost != null) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('titulo', selectedPost!.titulo);
+      prefs.setString('cuerpo', selectedPost!.cuerpo);
+      prefs.setString('imagen', selectedPost!.imagen);
+    }
   }
 
   Future<FbPosts?> initCachedFbPost() async {
@@ -37,9 +59,5 @@ class DataHolder {
         titulo: fbpost_titulo, cuerpo: fbpost_cuerpo, imagen: fbpost_imagen);
 
     return selectedPost;
-  }
-
-  DataHolder._internal() {
-    initCachedFbPost();
   }
 }
