@@ -2,11 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../FirestoreObjects/FbPosts.dart';
 import 'FirebaseAdmin.dart';
+import 'GeolocAdmin.dart';
+import 'HttpAdmin.dart';
 
 class DataHolder {
   static final DataHolder _dataHolder = new DataHolder._internal();
   FirebaseFirestore db = FirebaseFirestore.instance;
   FirebaseAdmin fbAdmin = FirebaseAdmin();
+  GeolocAdmin geolocAdmin = GeolocAdmin();
+  HttpAdmin httpAdmin = HttpAdmin();
 
   String sNombre = "DataHolder Examen";
   late String sPostTitle;

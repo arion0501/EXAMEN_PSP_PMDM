@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'package:examen_psp_pmdm_marcosgarcia/SingleTone/HttpAdmin.dart';
+import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import '../FirestoreObjects/FbPosts.dart';
 import '../OnBoarding/LoginView.dart';
 import '../OnBoarding/SettingsView.dart';
@@ -9,6 +13,7 @@ import '../Personalizados/DrawerCustom.dart';
 import '../Personalizados/PostCellView.dart';
 import '../Personalizados/PostGridCellView.dart';
 import '../SingleTone/DataHolder.dart';
+import '../SingleTone/PilotoF1.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -55,6 +60,44 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     descargarPosts();
+    determinarTempLocal();
+  }
+
+  determinarTempLocal() async {
+    Position position = await DataHolder().geolocAdmin.determinePosition();
+    double valor = await DataHolder()
+        .httpAdmin
+        .pedirTemperaturasEn(position.latitude, position.longitude);
+    print('La temperatura en el sitio donde estás es de: ${valor}' + ' ºC');
+  }
+
+  void getPilotosF1() async {
+    int iAnio = 2022;
+    final response = await http
+        .get(Uri.parse('http://ergast.com/api/f1/${iAnio}/drivers.json'));
+
+    if (response.statusCode == 200) {
+      print("Prueba --->>   " + jsonDecode(response.body).toString());
+      Map<String, dynamic> json = jsonDecode(response.body);
+      Map<String, dynamic> json2 = json["Datos"];
+      Map<String, dynamic> json3 = json2["Tabla Pilotos"];
+      List<dynamic> listaPilotos = json3["Pilotos"];
+
+      List<dynamic> listaPilotos2 = json["MRData"]["DriverTable"]["Drivers"];
+
+      List<PilotoF1> listaPilotosFinal = [];
+
+      for (int i = 0; i < listaPilotos2.length; i++) {
+        listaPilotosFinal.add(PilotoF1.fromJson(listaPilotos2[i]));
+      }
+
+      print("Piloto en posición 17 (nombre) --->>: " +
+          listaPilotosFinal[17].givenName +
+          "   " +
+          listaPilotosFinal[17].familyName);
+    } else {
+      throw Exception('Failed to load album');
+    }
   }
 
   void descargarPosts() async {
@@ -66,7 +109,7 @@ class _HomeViewState extends State<HomeView> {
     QuerySnapshot<FbPosts> querySnap = await reference.get();
     for (int i = 0; i < querySnap.docs.length; i++) {
       setState(() {
-        print('Post ' + i.toString());
+        //print('Post ' + i.toString());
         posts.add(querySnap.docs[i].data());
       });
     }
