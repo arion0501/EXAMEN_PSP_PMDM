@@ -25,7 +25,7 @@ class PostCellView extends StatelessWidget {
               Text(sText, style: TextStyle(fontSize: dFontSize)),
               TextButton(
                   onPressed: null,
-                  child: Text(" - ", style: TextStyle(fontSize: dFontSize)))
+                  child: Text("-", style: TextStyle(fontSize: dFontSize)))
             ],
           )),
       onTap: () {

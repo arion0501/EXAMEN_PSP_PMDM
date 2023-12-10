@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:examen_psp_pmdm_marcosgarcia/SingleTone/FirebaseAdmin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../FirestoreObjects/FbPosts.dart';
@@ -9,6 +8,7 @@ import '../Personalizados/BottomBar.dart';
 import '../Personalizados/DrawerCustom.dart';
 import '../Personalizados/PostCellView.dart';
 import '../Personalizados/PostGridCellView.dart';
+import '../SingleTone/DataHolder.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -24,12 +24,13 @@ class _HomeViewState extends State<HomeView> {
         ModalRoute.withName('/loginview'),
       );
     } else if (indice == 1) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => HomeView()),
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (BuildContext context) => HomeView()),
         ModalRoute.withName('/homeview'),
       );
-    }
-    else if (indice == 2) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => SettingsView()),
+    } else if (indice == 2) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (BuildContext context) => SettingsView()),
         ModalRoute.withName('/settingsview'),
       );
     }
@@ -37,7 +38,6 @@ class _HomeViewState extends State<HomeView> {
 
   FirebaseFirestore db = FirebaseFirestore.instance;
   final List<FbPosts> posts = [];
-  final Map<String, FbPosts> mapPosts = Map();
   bool bIsList = false;
 
   void onBottonMenuPressed(int indice) {
@@ -58,42 +58,18 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void descargarPosts() async {
-    print('Inicio');
     CollectionReference<FbPosts> reference = db
         .collection("Post")
-        .withConverter(fromFirestore: FbPosts.fromFirestore,
-        toFirestore: (FbPosts post, _) => post.toFirestore());
-    print('Descarga post');
+        .withConverter(
+            fromFirestore: FbPosts.fromFirestore,
+            toFirestore: (FbPosts post, _) => post.toFirestore());
     QuerySnapshot<FbPosts> querySnap = await reference.get();
-    for (int i = 0; i < querySnap.docs.length; i++){
+    for (int i = 0; i < querySnap.docs.length; i++) {
       setState(() {
         print('Post ' + i.toString());
         posts.add(querySnap.docs[i].data());
       });
     }
-    print('Descarga hecha');
-    /*posts.clear();
-
-    CollectionReference<FbPosts> ref = db.collection("Post").withConverter(
-        fromFirestore: FbPosts.fromFirestore,
-        toFirestore: (FbPosts post, _) => post.toFirestore());
-
-    ref.snapshots().listen(datosDescargados, onError: descargaPostError);*/
-  }
-
-  void datosDescargados(QuerySnapshot<FbPosts> postsDescargados) {
-    for (int i = 0; i < postsDescargados.docChanges.length; i++) {
-      FbPosts temp = postsDescargados.docChanges[i].doc.data()!;
-      mapPosts[postsDescargados.docChanges[i].doc.id] = temp;
-    }
-    setState(() {
-      posts.clear();
-      posts.addAll(mapPosts.values);
-    });
-  }
-
-  void descargaPostError(error) {
-    print("Listen failed: $error");
   }
 
   @override
@@ -121,8 +97,8 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void onItemListaClicked(int index) {
-    FirebaseAdmin().selectedPost = posts[index];
-    FirebaseAdmin().saveSelectedPostInCache();
+    DataHolder().selectedPost = posts[index];
+    DataHolder().saveSelectedPostInCache();
     Navigator.of(context).pushNamed('/postview');
   }
 
